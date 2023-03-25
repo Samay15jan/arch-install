@@ -1,17 +1,8 @@
 #!/bin/bash
-clear
-echo "
- _ _ _ ____ _    ____ ____ _  _ ____    ___ ____    ____ ____ ____ _  _    _ _  _ ____ ___ ____ _    _    
- | | | |___ |    |    |  | |\/| |___     |  |  |    |__| |__/ |    |__|    | |\ | [__   |  |__| |    |    
- |_|_| |___ |___ |___ |__| |  | |___     |  |__|    |  | |  \ |___ |  |    | | \| ___]  |  |  | |___ |___ 
-
-"
-
 read -p "Please enter hostname: " hostname
 read -p "Please enter username: " username
 read -p "Please enter user password: " user_password
 read -p "Please enter root password: " root_password
-clear
 
 # Step 1
 loadkeys us
@@ -58,13 +49,9 @@ systemctl enable NetworkManager.service
 sed '1,/^# Step 3$/d' arch_install2.sh > /home/arch_install3.sh
 chmod +x /home/arch_install3.sh
 rm /arch_install2.sh
-clear
-echo "INSTALLATION COMPLETED PLEASE RESTART"
 exit
 
 # Step 3
-
-## Installing packages
 sudo pacman -S --noconfirm ttf-dejavu pango i3 dmenu ffmpeg jq curl \
         alacritty pavucontrol go xorg openssh imagemagick unzip \
         light git nautilus firefox base-devel python python-pip \
@@ -73,15 +60,11 @@ sudo pacman -S --noconfirm ttf-dejavu pango i3 dmenu ffmpeg jq curl \
         pulseaudio sysstat android-file-transfer mtpfs gvfs-mtp ttf-font-awesome
 sudo pacman -R i3lock
 pip3 install pywal
-
-## Install yay and few packages
 git clone https://aur.archlinux.org/yay-git.git
 sudo chown -R $USER:$USER /home/$USER
 cd /home/$USER/yay-git
 makepkg -si
 yay -S --noconfirm pfetch jmtpfs picom-jonaburg-git i3lock-color python-pywalfox
-
-## Configuring
 echo "exec i3 " >> /home/$USER.xinitrc
 sudo systemctl enable bluetooth.service
 sudo chmod +s /usr/bin/light
@@ -105,8 +88,4 @@ sudo pywalfox install
 sudo rm -r /home/$USER/yay-git /home/$USER/arch-install /home/$USER/dotfiles /home/arch_install3.sh
 sudo chown -R $USER:$USER /home/$USER
 clear
-echo "FINISHED"
-echo "ADDITIONAL MANUAL CONFIG
-Go to this link and install the extension for firefox pywal theme 
-LINK: https://addons.mozilla.org/en-US/firefox/addon/pywalfox/
-"
+echo "Install pywallfox extension manually on firefox"
