@@ -59,7 +59,7 @@ sudo pacman -S --noconfirm ttf-dejavu pango i3 dmenu ffmpeg jq curl \
         mpv neofetch qbittorrent code sxiv nano kdeconnect lynx \
         pulseaudio sysstat android-file-transfer mtpfs gvfs-mtp ttf-font-awesome
 sudo pacman -R i3lock
-pip3 install pywal
+sudo pip3 install pywal
 git clone https://aur.archlinux.org/yay-git.git
 sudo chown -R $USER:$USER /home/$USER
 cd /home/$USER/yay-git
@@ -81,10 +81,12 @@ sudo mv /home/$USER/dotfiles/* /home/$USER/
 sudo mv /home/$USER/wallpaper Wallpaper
 sudo mv /home/$USER/bashrc .bashrc
 sudo mv /home/$USER/bash_profile .bash_profile
+sudo rm -r .config
 sudo mv /home/$USER/config .config
 sudo mv /home/$USER/screenlayout .screenlayout
 mkdir /home/$USER/.cache /home/$USER/.cache/wal/
 sudo pywalfox install
 sudo rm -r /home/$USER/yay-git /home/$USER/arch-install /home/$USER/dotfiles /home/arch_install3.sh
 sudo chown -R $USER:$USER /home/$USER
+wall
 echo "Install pywallfox extension manually on firefox"
