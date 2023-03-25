@@ -65,24 +65,24 @@ sudo chown -R $USER:$USER /home/$USER
 cd /home/$USER/yay-git
 makepkg -si
 yay -S --noconfirm pfetch jmtpfs picom-jonaburg-git i3lock-color python-pywalfox
-echo "exec i3 " >> /home/$USER.xinitrc
+echo "exec i3 " >> /home/$USER/.xinitrc
 sudo systemctl enable bluetooth.service
 sudo chmod +s /usr/bin/light
 git clone https://github.com/samay15jan/dotfiles
 git clone https://github.com/samay15jan/wallpaper
 sudo chown -R $USER:$USER /home/$USER
-sudo chmod -R 777 /home/$USER/dotfiles/bin
-sudo mv -r /home/$USER/dotfiles/bin /usr/local
+sudo chmod -R 777 /home/$USER/dotfiles/bin/
+sudo mv /home/$USER/dotfiles/bin /usr/local
 sudo chown -R $USER:$USER /usr/local/bin/
-sudo chmod -R 777 /home/$USER/dotfiles/config/i3/scripts
-sudo chmod -R 777 /home/$USER/dotfiles/screenlayout/layout.sh
-sudo rm -r /home/$USER/dotfiles/.git 
-sudo mv /home/$USER/dotfiles/* /home/$USER
-mv /home/$USER/wallpaper Wallpaper
-mv /home/$USER/bashrc .bashrc
-mv /home/$USER/bash_profile .bash_profile
-mv /home/$USER/config .config
-mv /home/$USER/screenlayout .screenlayout
+sudo chmod -R 777 /home/$USER/dotfiles/config/i3/scripts/
+sudo chmod 777 /home/$USER/dotfiles/screenlayout/layout.sh
+sudo rm -r /home/$USER/dotfiles/.git/
+sudo mv /home/$USER/dotfiles/* /home/$USER/
+sudo mv /home/$USER/wallpaper Wallpaper
+sudo mv /home/$USER/bashrc .bashrc
+sudo mv /home/$USER/bash_profile .bash_profile
+sudo mv /home/$USER/config .config
+sudo mv /home/$USER/screenlayout .screenlayout
 mkdir /home/$USER/.cache /home/$USER/.cache/wal/
 sudo pywalfox install
 sudo rm -r /home/$USER/yay-git /home/$USER/arch-install /home/$USER/dotfiles /home/arch_install3.sh
