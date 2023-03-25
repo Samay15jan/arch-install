@@ -1,9 +1,9 @@
 #!/bin/bash
 clear
 echo "
-               _ _ _ ____ _    ____ ____ _  _ ____    ___ ____    ____ ____ ____ _  _    _ _  _ ____ ___ ____ _    _    
-               | | | |___ |    |    |  | |\/| |___     |  |  |    |__| |__/ |    |__|    | |\ | [__   |  |__| |    |    
-               |_|_| |___ |___ |___ |__| |  | |___     |  |__|    |  | |  \ |___ |  |    | | \| ___]  |  |  | |___ |___ 
+ _ _ _ ____ _    ____ ____ _  _ ____    ___ ____    ____ ____ ____ _  _    _ _  _ ____ ___ ____ _    _    
+ | | | |___ |    |    |  | |\/| |___     |  |  |    |__| |__/ |    |__|    | |\ | [__   |  |__| |    |    
+ |_|_| |___ |___ |___ |__| |  | |___     |  |__|    |  | |  \ |___ |  |    | | \| ___]  |  |  | |___ |___ 
 
 "
 
@@ -55,10 +55,8 @@ grub-install /dev/sda
 sed -i 's/quiet/pci=noaer/g' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 systemctl enable NetworkManager.service
-location= /home/arch_install3.sh
 sed '1,/^# Step 3$/d' arch_install2.sh > /home/arch_install3.sh
 chmod +x /home/arch_install3.sh
-chown -R $username:$username /home/$username
 rm /arch_install2.sh
 clear
 echo "INSTALLATION COMPLETED PLEASE RESTART"
@@ -104,7 +102,7 @@ mv /home/$USER/config .config
 mv /home/$USER/screenlayout .screenlayout
 mkdir /home/$USER/.cache /home/$USER/.cache/wal/
 sudo pywalfox install
-sudo rm -r /home/$USER/yay-git /home/$USER/arch-install /home/$USER/dotfiles
+sudo rm -r /home/$USER/yay-git /home/$USER/arch-install /home/$USER/dotfiles /home/arch_install3.sh
 sudo chown -R $USER:$USER /home/$USER
 clear
 echo "FINISHED"
