@@ -86,7 +86,7 @@ sudo mv /home/$USER/config .config
 sudo mv /home/$USER/screenlayout .screenlayout
 mkdir /home/$USER/.cache /home/$USER/.cache/wal/
 sudo pywalfox install
-sudo rm -r /home/$USER/yay-git /home/$USER/arch-install /home/$USER/dotfiles /home/arch_install3.sh
+sudo rm -r /home/$USER/yay-git /home/$USER/arch-install /home/$USER/dotfiles 
 sudo chown -R $USER:$USER /home/$USER
 wall
 echo "Install pywallfox extension manually on firefox"
