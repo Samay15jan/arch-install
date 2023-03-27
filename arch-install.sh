@@ -60,6 +60,7 @@ sudo pacman -S --noconfirm ttf-dejavu pango i3 dmenu ffmpeg jq curl \
         pulseaudio sysstat android-file-transfer mtpfs gvfs-mtp ttf-font-awesome
 sudo pacman -R i3lock
 sudo pip3 install pywal
+cd /home/$USER
 git clone https://aur.archlinux.org/yay-git.git
 sudo chown -R $USER:$USER /home/$USER
 cd /home/$USER/yay-git
