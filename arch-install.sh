@@ -3,23 +3,26 @@ read -p "Please enter hostname: " hostname
 read -p "Please enter username: " username
 read -p "Please enter user password: " user_password
 read -p "Please enter root password: " root_password
-
+lsblk | grep disk
+read -p "Please enter device id where you want to install Arch(eg-sda,sdb): " drive
+efi="${drive}1"
+root="${drive}2"
 # Step 1
 loadkeys us
 pacman --noconfirm -Sy archlinux-keyring
 timedatectl set-ntp true
-wipefs -a /dev/sda1
-wipefs -a /dev/sda2
-wipefs -a /dev/sda
+wipefs -a /dev/$efi
+wipefs -a /dev/$root
+wipefs -a /dev/$drive
 sfdisk /dev/sda << EOF
 ,500m
 ;
 EOF
-mkfs.fat -F 32 /dev/sda1
-mkfs.ext4 /dev/sda2
-mount /dev/sda2 /mnt
+mkfs.fat -F 32 /dev/$efi
+mkfs.ext4 /dev/$root
+mount /dev/$root /mnt
 mkdir -p /mnt/boot/efi
-mount /dev/sda1 /mnt/boot/efi
+mount /dev/$efi /mnt/boot/efi
 pacstrap /mnt base linux linux-firmware efibootmgr grub networkmanager sed nano sudo
 genfstab -U /mnt >> /mnt/etc/fstab
 echo "echo $hostname > /etc/hostname" >> /mnt/temp.sh
@@ -27,6 +30,7 @@ echo "useradd -m -G wheel -s /bin/bash $username" >> /mnt/temp.sh
 echo "echo \"$username ALL=(ALL:ALL) ALL\" >> /etc/sudoers" >> /mnt/temp.sh
 echo "echo $username:$user_password | chpasswd" >> /mnt/temp.sh
 echo "echo root:$root_password | chpasswd" >> /mnt/temp.sh
+echo "grub-install /dev/$drive"
 chmod u+x /mnt/temp.sh 
 sed '1,/^# Step 2$/d' `basename $0` > /mnt/arch_install2.sh
 chmod +x /mnt/arch_install2.sh
@@ -42,7 +46,6 @@ echo "LANG=en_IN.UTF-8" >> /etc/locale.conf
 echo "KEYMAP=us" > /etc/locale.conf
 ./temp.sh
 rm -r /temp.sh
-grub-install /dev/sda
 sed -i 's/quiet/pci=noaer/g' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 systemctl enable NetworkManager.service
