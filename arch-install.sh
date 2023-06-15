@@ -14,7 +14,7 @@ timedatectl set-ntp true
 wipefs -a /dev/$efi
 wipefs -a /dev/$root
 wipefs -a /dev/$drive
-sfdisk /dev/$drive << EOF
+sfdisk --force /dev/$drive << EOF
 ,500m
 ;
 EOF
