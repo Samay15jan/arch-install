@@ -30,7 +30,6 @@ echo "useradd -m -G wheel -s /bin/bash $username" >> /mnt/temp.sh
 echo "echo \"$username ALL=(ALL:ALL) ALL\" >> /etc/sudoers" >> /mnt/temp.sh
 echo "echo $username:$user_password | chpasswd" >> /mnt/temp.sh
 echo "echo root:$root_password | chpasswd" >> /mnt/temp.sh
-echo "grub-install /dev/$drive"
 chmod u+x /mnt/temp.sh 
 sed '1,/^# Step 2$/d' `basename $0` > /mnt/arch_install2.sh
 chmod +x /mnt/arch_install2.sh
@@ -46,6 +45,7 @@ echo "LANG=en_IN.UTF-8" >> /etc/locale.conf
 echo "KEYMAP=us" > /etc/locale.conf
 ./temp.sh
 rm -r /temp.sh
+grub-install /dev/sda
 sed -i 's/quiet/pci=noaer/g' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 systemctl enable NetworkManager.service
