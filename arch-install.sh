@@ -60,7 +60,7 @@ sudo pacman -S --noconfirm ttf-dejavu pango i3 dmenu ffmpeg jq curl \
         light git nautilus firefox base-devel python python-pip \
         arandr feh bluez bluez-utils gmtp pamixer acpi xorg-xinit \
         mpv neofetch qbittorrent code sxiv nano kdeconnect lynx \
-        pulseaudio sysstat android-file-transfer mtpfs gvfs-mtp ttf-font-awesome
+        pulseaudio sysstat android-file-transfer mtpfs gvfs-mtp ttf-font-awesome polybar
 sudo pacman -R i3lock
 sudo pip3 install pywal
 cd /home/$USER
