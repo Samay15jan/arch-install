@@ -132,16 +132,16 @@ sudo pacman -S --noconfirm ttf-dejavu pango i3 dmenu ffmpeg jq curl wget\
         arandr feh bluez bluez-utils gmtp pamixer acpi xorg-xinit gvfs-mtp\
         mpv neofetch qbittorrent code sxiv vim npm polybar ttf-font-awesome \
         pulseaudio sysstat android-file-transfer
-sudo pacman -R i3lock
-sudo pacman -S python-pywal
+sudo pacman -R --noconfirm i3lock 
+sudo pacman -S --noconfirm python-pywal
 echo "exec i3 " >> $HOME/.xinitrc
 sudo systemctl enable bluetooth.service
 sudo chmod +s /usr/bin/light
 pulseaudio --start
 cd $HOME 
 git clone https://github.com/samay15jan/dotfiles
-rm $HOME/dotfiles/.git
-cp -r $HOME/dotfiles/.* /$HOME/dotfiles/Wallpaper 
+sudo rm -r $HOME/dotfiles/.git
+cp -r $HOME/dotfiles/.* $HOME/dotfiles/Wallpaper $HOME/dotfiles/keybinding ~/
 sudo cp $HOME/dotfiles/bin/* /usr/local/bin
 sudo chmod u+x /usr/local/bin/*
 sudo chmod u+x $HOME/.config/i3/scripts/*
@@ -155,6 +155,7 @@ if [ "$refind_choice" == "y" ]; then
   echo "include themes/rEFInd-minimal/theme.conf" >> /boot/efi/EFI/refind/
 else
   # Keep GRUB
+  echo "Keeping Grub"
 fi
 
 git clone https://aur.archlinux.org/yay-git
