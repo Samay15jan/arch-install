@@ -124,8 +124,6 @@ exit
 
 
 # Step 3
-echo "Do you want to replace GRUB with rEFInd (y/n)?"
-read -p "Enter your choice: " refind_choice
 sudo pacman -S --noconfirm ttf-dejavu pango i3 dmenu ffmpeg jq curl wget\
         alacritty pavucontrol go xorg openssh imagemagick wmctrl scrot unzip \
         light git nautilus qutebrowser base-devel python python-pip mtpfs \
@@ -145,19 +143,6 @@ cp -r $HOME/dotfiles/.* $HOME/dotfiles/Wallpaper $HOME/dotfiles/keybinding ~/
 sudo cp $HOME/dotfiles/bin/* /usr/local/bin
 sudo chmod u+x /usr/local/bin/*
 sudo chmod u+x $HOME/.config/i3/scripts/*
-
-if [ "$refind_choice" == "y" ]; then
-  # Install rEFInd
-  sudo pacman -S --noconfirm refind
-  sudo refind-install
-  sudo rm -r /boot/efi/EFI/refind/themes
-  sudo cp -r $HOME/dotfiles/refind/* /boot/efi/EFI/refind/
-  echo "include themes/rEFInd-minimal/theme.conf" >> /boot/efi/EFI/refind/
-else
-  # Keep GRUB
-  echo "Keeping Grub"
-fi
-
 git clone https://aur.archlinux.org/yay-git
 sudo chown -R $USER:$USER $HOME 
 cd $HOME/yay-git
