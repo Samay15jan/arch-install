@@ -1,40 +1,40 @@
 #!/bin/bash
 
 # Display a welcome message
-echo "\033[32m
+echo "
                     _ _ _ ____ _    ____ ____ _  _ ____    ___ ____    ____ ____ ____ _  _    _ _  _ ____ ___ ____ _    _
                     | | | |___ |    |    |  | |\/| |___     |  |  |    |__| |__/ |    |__|    | |\ | [__   |  |__| |    |
                     |_|_| |___ |___ |___ |__| |  | |___     |  |__|    |  | |  \ |___ |  |    | | \| ___]  |  |  | |___ |___
 
-\033[0m"
+"
 
 
 # Collecting user information
 echo "Please enter the hostname for your system:"
 read -p "Hostname: " hostname
 if [ -z "$hostname" ]; then
-    echo "\033[31mError: Hostname cannot be empty.\033[0m"
+    echo "Error: Hostname cannot be empty."
     exit 1
 fi
 
 echo "Enter a username for the system:"
 read -p "Username: " username
 if [ -z "$username" ]; then
-    echo "\033[31mError: Username cannot be empty.\033[0m"
+    echo "Error: Username cannot be empty."
     exit 1
 fi
 
 echo "Set a password for the user '$username':"
 read -p "Password: " user_password
 if [ -z "$user_password" ]; then
-    echo "\033[31mError: Password cannot be empty.\033[0m"
+    echo "Error: Password cannot be empty."
     exit 1
 fi
 
 echo "Set the root password for the system:"
 read -p "Root password: " root_password
 if [ -z "$root_password" ]; then
-    echo "\033[31mError: Root password cannot be empty.\033[0m"
+    echo "Error: Root password cannot be empty."
     exit 1
 fi
 
@@ -56,13 +56,13 @@ echo "Please select the drive where you want to install Arch (e.g., sda, sdb):"
 read -p "Drive: " drive
 
 if [ -z "$drive" ]; then
-    echo "\033[31mError: Drive selection cannot be empty.\033[0m"
+    echo "Error: Drive selection cannot be empty."
     exit 1
 fi
 
 
 # Inform user about formatting
-echo "\033[31mWARNING: Formatting the selected drive ($drive) will erase all existing data on it.\033[0m"
+echo "WARNING: Formatting the selected drive ($drive) will erase all existing data on it."
 echo "Do you want to continue? (y/n):"
 read -p "Confirmation: " confirmation
 
