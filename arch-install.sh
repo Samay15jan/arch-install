@@ -164,4 +164,5 @@ cd $HOME/yay-git
 makepkg -si
 yay -S --noconfirm pfetch i3lock-fancy jmtpfs python-pywalfox
 sudo pywalfox install
-rm -r $HOME/dotfiles $HOME/yay-git
+sudo rm -r $HOME/dotfiles $HOME/yay-git
+startx
