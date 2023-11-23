@@ -1,12 +1,79 @@
 #!/bin/bash
-read -p "Please enter hostname: " hostname
-read -p "Please enter username: " username
-read -p "Please enter user password: " user_password
-read -p "Please enter root password: " root_password
-lsblk | grep disk
-read -p "Please enter device id where you want to install Arch(eg-sda,sdb): " drive
+
+# Display a welcome message
+echo "\033[32m
+                    _ _ _ ____ _    ____ ____ _  _ ____    ___ ____    ____ ____ ____ _  _    _ _  _ ____ ___ ____ _    _
+                    | | | |___ |    |    |  | |\/| |___     |  |  |    |__| |__/ |    |__|    | |\ | [__   |  |__| |    |
+                    |_|_| |___ |___ |___ |__| |  | |___     |  |__|    |  | |  \ |___ |  |    | | \| ___]  |  |  | |___ |___
+
+\033[0m"
+
+
+# Collecting user information
+echo "Please enter the hostname for your system:"
+read -p "Hostname: " hostname
+if [ -z "$hostname" ]; then
+    echo "\033[31mError: Hostname cannot be empty.\033[0m"
+    exit 1
+fi
+
+echo "Enter a username for the system:"
+read -p "Username: " username
+if [ -z "$username" ]; then
+    echo "\033[31mError: Username cannot be empty.\033[0m"
+    exit 1
+fi
+
+echo "Set a password for the user '$username':"
+read -p "Password: " user_password
+if [ -z "$user_password" ]; then
+    echo "\033[31mError: Password cannot be empty.\033[0m"
+    exit 1
+fi
+
+echo "Set the root password for the system:"
+read -p "Root password: " root_password
+if [ -z "$root_password" ]; then
+    echo "\033[31mError: Root password cannot be empty.\033[0m"
+    exit 1
+fi
+
+
+# Display available drives
+echo "----------------------------------"
+echo "Available drives:"
+echo "----------------------------------"
+echo ""
+echo "NAME  SIZE  TYPE"
+echo ""
+lsblk -o NAME,SIZE,TYPE | grep disk
+echo ""
+echo "----------------------------------"
+
+
+# Prompt for drive selection
+echo "Please select the drive where you want to install Arch (e.g., sda, sdb):"
+read -p "Drive: " drive
+
+if [ -z "$drive" ]; then
+    echo "\033[31mError: Drive selection cannot be empty.\033[0m"
+    exit 1
+fi
+
+
+# Inform user about formatting
+echo "\033[31mWARNING: Formatting the selected drive ($drive) will erase all existing data on it.\033[0m"
+echo "Do you want to continue? (y/n):"
+read -p "Confirmation: " confirmation
+
+if [ "$confirmation" != "y" ]; then
+    echo "Exiting..."
+    exit 1
+fi
 efi="${drive}1"
 root="${drive}2"
+
+
 # Step 1
 loadkeys us
 pacman --noconfirm -Sy archlinux-keyring
@@ -23,7 +90,7 @@ mkfs.ext4 /dev/$root
 mount /dev/$root /mnt
 mkdir -p /mnt/boot/efi
 mount /dev/$efi /mnt/boot/efi
-pacstrap /mnt base linux linux-firmware efibootmgr grub networkmanager sed nano sudo
+pacstrap /mnt base linux linux-firmware efibootmgr grub networkmanager sed sudo
 genfstab -U /mnt >> /mnt/etc/fstab
 echo "echo $hostname > /etc/hostname" >> /mnt/temp.sh
 echo "useradd -m -G wheel -s /bin/bash $username" >> /mnt/temp.sh
@@ -36,6 +103,7 @@ sed '1,/^# Step 2$/d' `basename $0` > /mnt/arch_install2.sh
 chmod +x /mnt/arch_install2.sh
 arch-chroot /mnt ./arch_install2.sh
 exit
+
 
 # Step 2
 ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
@@ -54,43 +122,45 @@ chmod +x /home/arch_install3.sh
 rm /arch_install2.sh
 exit
 
+
 # Step 3
-sudo pacman -S --noconfirm ttf-dejavu pango i3 dmenu ffmpeg jq curl \
-        alacritty pavucontrol go xorg openssh imagemagick unzip \
-        light git nautilus firefox base-devel python python-pip \
-        arandr feh bluez bluez-utils gmtp pamixer acpi xorg-xinit \
-        mpv neofetch qbittorrent code sxiv nano kdeconnect lynx \
-        pulseaudio sysstat android-file-transfer mtpfs gvfs-mtp ttf-font-awesome polybar
+echo "Do you want to replace GRUB with rEFInd (y/n)?"
+read -p "Enter your choice: " refind_choice
+sudo pacman -S --noconfirm ttf-dejavu pango i3 dmenu ffmpeg jq curl wget\
+        alacritty pavucontrol go xorg openssh imagemagick wmctrl scrot unzip \
+        light git nautilus qutebrowser base-devel python python-pip mtpfs \
+        arandr feh bluez bluez-utils gmtp pamixer acpi xorg-xinit gvfs-mtp\
+        mpv neofetch qbittorrent code sxiv vim npm polybar ttf-font-awesome \
+        pulseaudio sysstat android-file-transfer
 sudo pacman -R i3lock
-sudo pip3 install pywal
-cd /home/$USER
-git clone https://aur.archlinux.org/yay-git.git
-sudo chown -R $USER:$USER /home/$USER
-cd /home/$USER/yay-git
-makepkg -si
-yay -S --noconfirm pfetch jmtpfs picom-jonaburg-git i3lock-color python-pywalfox
-echo "exec i3 " >> /home/$USER/.xinitrc
+sudo pacman -S python-pywal
+echo "exec i3 " >> $HOME/.xinitrc
 sudo systemctl enable bluetooth.service
 sudo chmod +s /usr/bin/light
+pulseaudio --start
+cd $HOME 
 git clone https://github.com/samay15jan/dotfiles
-git clone https://github.com/samay15jan/wallpaper
-sudo chown -R $USER:$USER /home/$USER
-sudo chmod -R 777 /home/$USER/dotfiles/bin/
-sudo mv /home/$USER/dotfiles/bin /usr/local
-sudo chown -R $USER:$USER /usr/local/bin/
-sudo chmod -R 777 /home/$USER/dotfiles/config/i3/scripts/
-sudo chmod 777 /home/$USER/dotfiles/screenlayout/layout.sh
-sudo rm -r /home/$USER/dotfiles/.git/
-sudo mv /home/$USER/dotfiles/* /home/$USER/
-sudo mv /home/$USER/wallpaper Wallpaper
-sudo mv /home/$USER/bashrc .bashrc
-sudo mv /home/$USER/bash_profile .bash_profile
-sudo rm -r .config
-sudo mv /home/$USER/config .config
-sudo mv /home/$USER/screenlayout .screenlayout
-mkdir /home/$USER/.cache /home/$USER/.cache/wal/
+rm $HOME/dotfiles/.git
+cp -r $HOME/dotfiles/.* /$HOME/dotfiles/Wallpaper 
+sudo cp $HOME/dotfiles/bin/* /usr/local/bin
+sudo chmod u+x /usr/local/bin/*
+sudo chmod u+x $HOME/.config/i3/scripts/*
+
+if [ "$refind_choice" == "y" ]; then
+  # Install rEFInd
+  sudo pacman -S --noconfirm refind
+  sudo refind-install
+  sudo rm -r /boot/efi/EFI/refind/themes
+  sudo cp -r $HOME/dotfiles/refind/* /boot/efi/EFI/refind/
+  echo "include themes/rEFInd-minimal/theme.conf" >> /boot/efi/EFI/refind/
+else
+  # Keep GRUB
+fi
+
+git clone https://aur.archlinux.org/yay-git
+sudo chown -R $USER:$USER $HOME 
+cd $HOME/yay-git
+makepkg -si
+yay -S --noconfirm pfetch i3lock-fancy jmtpfs python-pywalfox
 sudo pywalfox install
-sudo rm -r /home/$USER/yay-git /home/$USER/arch-install /home/$USER/dotfiles 
-sudo chown -R $USER:$USER /home/$USER
-wall
-echo "Install pywallfox extension manually on firefox"
+rm -r $HOME/dotfiles $HOME/yay-git
