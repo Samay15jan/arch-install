@@ -8,6 +8,52 @@ echo "
 
 "
 
+#Checking internet connection 
+rfkill unblock all
+if ping -c 1 google.com > /dev/null; then
+  echo ""
+else
+  iwctl device list
+  stations=$(iwctl device list | grep station | cut -d ' ' -f 2)
+  counter=1
+  wifi_list=""
+
+  for station in $stations; do
+    ssid=$(iwctl station $station get-network | grep SSID | cut -d ':' -f 2 | cut -d '"' -f 2)
+    if [ -z "$ssid" ]; then
+      continue
+    fi
+
+    wifi_list="$wifi_list$counter. $ssid\n"
+    counter=$((counter + 1))
+  done
+
+  read -p "Select the WiFi network: " selected_number
+  if [[ ! $selected_number =~ ^[0-9]+$ ]]; then
+    echo "Invalid selection. Please enter a valid number."
+    exit 1
+  fi
+
+  if [[ $selected_number -lt 1 || $selected_number -gt $counter ]]; then
+    echo "Invalid selection. Please enter a number between 1 and $counter."
+    exit 1
+  fi
+
+  selected_ssid=$(echo "$wifi_list" | sed -n "$selected_number p")
+  selected_ssid=${selected_ssid#*/}
+
+  echo "Connecting to WiFi network: $selected_ssid"
+  iwctl station $stations | grep station | cut -d ' ' -f 2 | xargs -I station iwctl station $station connect $selected_ssid security=wpa2-psk key=$wifi_password
+  sleep 5
+  if ping -c 1 google.com > /dev/null; then
+    echo ""
+  else
+    echo "Connecting to $selected_ssid failed!"
+    echo "Please manually configure your wifi connection."
+    exit 1
+    fi
+fi
+
 
 # Collecting user information
 echo "Please enter the hostname for your system:"
@@ -75,6 +121,7 @@ root="${drive}2"
 
 
 # Step 1
+pacman-key --init
 loadkeys us
 pacman --noconfirm -Sy archlinux-keyring
 timedatectl set-ntp true
@@ -98,14 +145,19 @@ echo "echo \"$username ALL=(ALL:ALL) ALL\" >> /etc/sudoers" >> /mnt/temp.sh
 echo "echo $username:$user_password | chpasswd" >> /mnt/temp.sh
 echo "echo root:$root_password | chpasswd" >> /mnt/temp.sh
 echo "grub-install /dev/$drive" >> /mnt/temp.sh
+echo "USER=$username"
 chmod u+x /mnt/temp.sh 
 sed '1,/^# Step 2$/d' `basename $0` > /mnt/arch_install2.sh
 chmod +x /mnt/arch_install2.sh
 arch-chroot /mnt ./arch_install2.sh
-exit
+echo "Minimal Arch Linux Installed Successfully!"
+echo "System will now reboot in 5 seconds"
+sleep 5
+reboot
 
 
 # Step 2
+#!/bin/bash
 ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
 hwclock --systohc
 sed -i "/en_IN.UTF-8/s/^#//g" /etc/locale.gen
@@ -117,13 +169,14 @@ rm -r /temp.sh
 sed -i 's/quiet/pci=noaer/g' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 systemctl enable NetworkManager.service
-sed '1,/^# Step 3$/d' arch_install2.sh > /home/arch_install3.sh
-chmod +x /home/arch_install3.sh
+sed '1,/^# Step 3$/d' arch_install2.sh > /home/$USER/arch_install3.sh
+chmod +x /home/$USER/arch_install3.sh
 rm /arch_install2.sh
 exit
 
 
 # Step 3
+#!/bin/bash
 sudo pacman -S --noconfirm ttf-dejavu pango i3 dmenu ffmpeg jq curl wget\
         alacritty pavucontrol go xorg openssh imagemagick wmctrl scrot unzip \
         light git nautilus qutebrowser base-devel python python-pip mtpfs \
