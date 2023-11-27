@@ -145,7 +145,7 @@ echo "echo \"$username ALL=(ALL:ALL) ALL\" >> /etc/sudoers" >> /mnt/temp.sh
 echo "echo $username:$user_password | chpasswd" >> /mnt/temp.sh
 echo "echo root:$root_password | chpasswd" >> /mnt/temp.sh
 echo "grub-install /dev/$drive" >> /mnt/temp.sh
-echo "USER=$username"
+echo "USER=$username" >> /mnt/temp.sh
 chmod u+x /mnt/temp.sh 
 sed '1,/^# Step 2$/d' `basename $0` > /mnt/arch_install2.sh
 chmod +x /mnt/arch_install2.sh
