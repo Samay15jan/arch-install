@@ -14,46 +14,37 @@ if ping -c 1 google.com > /dev/null; then
   echo ""
 else
   iwctl device list
-  stations=$(iwctl device list | grep station | cut -d ' ' -f 2)
-  counter=1
-  wifi_list=""
-
-  for station in $stations; do
-    ssid=$(iwctl station $station get-network | grep SSID | cut -d ':' -f 2 | cut -d '"' -f 2)
-    if [ -z "$ssid" ]; then
-      continue
-    fi
-
-    wifi_list="$wifi_list$counter. $ssid\n"
-    counter=$((counter + 1))
-  done
-
-  read -p "Select the WiFi network: " selected_number
-  if [[ ! $selected_number =~ ^[0-9]+$ ]]; then
-    echo "Invalid selection. Please enter a valid number."
-    exit 1
+  read -p "Enter the WiFi Adaptor: " selected_adaptor
+  if [ -z "$selected_adaptor" ]; then
+      echo "Error: Wifi Adaptor cannot be empty."
+      exit 1
   fi
+  
+  iwctl station $selected_adaptor scan
+  iwctl stattion $selected_adaptor get-networks
 
-  if [[ $selected_number -lt 1 || $selected_number -gt $counter ]]; then
-    echo "Invalid selection. Please enter a number between 1 and $counter."
-    exit 1
+  read -p "Enter the WIFI network: " selected_ssid
+    if [ -z "$selected_ssid" ]; then
+      echo "Error: Wifi network cannot be empty."
+      exit 1
   fi
-
-  selected_ssid=$(echo "$wifi_list" | sed -n "$selected_number p")
-  selected_ssid=${selected_ssid#*/}
-
-  echo "Connecting to WiFi network: $selected_ssid"
-  iwctl station $stations | grep station | cut -d ' ' -f 2 | xargs -I station iwctl station $station connect $selected_ssid security=wpa2-psk key=$wifi_password
+  
+  read -p "Enter Passwork for $selected_ssid: " wifi_password
+    if [ -z "$wifi_password" ]; then
+      echo "Error: Wifi password cannot be empty."
+      exit 1
+  fi
+  
+  iwctl --passphrase=$wifi_password station $selected_adaptor connect $selected_ssid
   sleep 5
   if ping -c 1 google.com > /dev/null; then
-    echo ""
+    echo "Connected to $selected_ssid successfully!"
   else
     echo "Connecting to $selected_ssid failed!"
     echo "Please manually configure your wifi connection."
     exit 1
-    fi
+  fi
 fi
-
 
 # Collecting user information
 echo "Please enter the hostname for your system:"
