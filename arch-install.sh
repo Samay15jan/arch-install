@@ -2,10 +2,10 @@
 
 # Display a welcome message
 echo "
-              _ _ _ ____ _    ____ ____ _  _ ____    ___ ____    ____ ____ ____ _  _    _ _  _ ____ ___ ____ _    _
-              | | | |___ |    |    |  | |\/| |___     |  |  |    |__| |__/ |    |__|    | |\ | [__   |  |__| |    |
-              |_|_| |___ |___ |___ |__| |  | |___     |  |__|    |  | |  \ |___ |  |    | | \| ___]  |  |  | |___ |___
-
+                   _ _ _ ____ _    ____ ____ _  _ ____    ___ ____     _  _ ____ _ _  _ ____ ____ 
+                   | | | |___ |    |    |  | |\/| |___     |  |  |     |__| |___ | |\/| |  | [__  
+                   |_|_| |___ |___ |___ |__| |  | |___     |  |__|     |  | |___ | |  | |__| ___] 
+                   
 "
 
 #Checking internet connection 
@@ -188,10 +188,10 @@ sudo systemctl enable bluetooth.service
 sudo chmod +s /usr/bin/light
 pulseaudio --start
 cd $HOME 
-git clone https://github.com/samay15jan/dotfiles
-sudo rm -r $HOME/dotfiles/.git
-cp -r $HOME/dotfiles/.* $HOME/dotfiles/Wallpaper $HOME/dotfiles/keybinding ~/
-sudo cp $HOME/dotfiles/bin/* /usr/local/bin
+git clone https://github.com/samay15jan/heimos
+sudo rm -r $HOME/heimos/.git
+cp -r $HOME/heimos/.* $HOME/heimos/Wallpaper $HOME/heimos/keybinding ~/
+sudo cp $HOME/heimos/bin/* /usr/local/bin
 sudo chmod u+x /usr/local/bin/*
 sudo chmod u+x $HOME/.config/i3/scripts/*
 git clone https://aur.archlinux.org/yay-git
@@ -200,5 +200,5 @@ cd $HOME/yay-git
 makepkg -si
 yay -S --noconfirm pfetch i3lock-fancy jmtpfs python-pywalfox
 sudo pywalfox install
-sudo rm -r $HOME/dotfiles $HOME/yay-git
+sudo rm -r $HOME/heimos $HOME/yay-git
 startx
