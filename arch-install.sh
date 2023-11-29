@@ -2,9 +2,9 @@
 
 # Display a welcome message
 echo "
-                   _ _ _ ____ _    ____ ____ _  _ ____    ___ ____     _  _ ____ _ _  _ ____ ____ 
-                   | | | |___ |    |    |  | |\/| |___     |  |  |     |__| |___ | |\/| |  | [__  
-                   |_|_| |___ |___ |___ |__| |  | |___     |  |__|     |  | |___ | |  | |__| ___] 
+ _ _ _ ____ _    ____ ____ _  _ ____    ___ ____     _  _ ____ _ _  _ ____ ____ 
+ | | | |___ |    |    |  | |\/| |___     |  |  |     |__| |___ | |\/| |  | [__  
+ |_|_| |___ |___ |___ |__| |  | |___     |  |__|     |  | |___ | |  | |__| ___] 
                    
 "
 
@@ -143,7 +143,6 @@ echo "echo \"$username ALL=(ALL:ALL) ALL\" >> /etc/sudoers" >> /mnt/temp.sh
 echo "echo $username:$user_password | chpasswd" >> /mnt/temp.sh
 echo "echo root:$root_password | chpasswd" >> /mnt/temp.sh
 echo "grub-install /dev/$drive" >> /mnt/temp.sh
-echo "USER=$username" >> /mnt/temp.sh
 chmod u+x /mnt/temp.sh 
 sed '1,/^# Step 2$/d' `basename $0` > /mnt/arch_install2.sh
 chmod +x /mnt/arch_install2.sh
@@ -167,8 +166,8 @@ rm -r /temp.sh
 sed -i 's/quiet/pci=noaer/g' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 systemctl enable NetworkManager.service
-sed '1,/^# Step 3$/d' arch_install2.sh > /home/$USER/arch_install3.sh
-chmod +x /home/$USER/arch_install3.sh
+sed '1,/^# Step 3$/d' arch_install2.sh > /home/arch_install3.sh
+chmod +x /home/arch_install3.sh
 rm /arch_install2.sh
 exit
 
