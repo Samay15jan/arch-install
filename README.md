@@ -18,7 +18,7 @@ Basically just bunch of scripts.
 - **Bootable ISO Image**: Find pre-built HeimOS ISO images in the [Releases](https://github.com/samay15jan/heimos/releases) section for a fast and easy installation experience.
 
 
-## Usage
+### Usage
 
 1. Download the HeimOS ISO from the [Releases](https://github.com/samay15jan/heimos/releases) section.
 2. Create a bootable USB or use a virtual machine to boot from the ISO.
