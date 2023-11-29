@@ -1,10 +1,9 @@
 # HeimOS - Arch Linux Auto Installer
 
 HeimOS is a personalized Quick Arch Linux installation and configuration tool.
-Basically just bunch of scripts.
 
 
-## Preview
+### Preview
 
 ![HeimOS Desktop](/preview.png)
 
