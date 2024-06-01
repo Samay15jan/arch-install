@@ -1,0 +1,9 @@
+battery=$(upower -i /org/freedesktop/UPower/devices/headset_dev_9C_69_42_5C_AD_3E | grep percentage | awk '{print $2 }')
+if [[ -n $battery ]]; then
+   if [[ "$battery" != "0%" ]]; then
+     echo "$battery"
+   else
+     exit 0
+   fi
+fi
+

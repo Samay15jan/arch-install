@@ -135,7 +135,7 @@ mkfs.ext4 /dev/$root
 mount /dev/$root /mnt
 mkdir -p /mnt/boot/efi
 mount /dev/$efi /mnt/boot/efi
-pacstrap /mnt base linux linux-firmware efibootmgr grub networkmanager sed sudo
+pacstrap /mnt base linux linux-firmware grub efibootmgr networkmanager sed sudo
 genfstab -U /mnt >> /mnt/etc/fstab
 echo "echo $hostname > /etc/hostname" >> /mnt/temp.sh
 echo "useradd -m -G wheel -s /bin/bash $username" >> /mnt/temp.sh
@@ -174,14 +174,14 @@ exit
 
 # Step 3
 #!/bin/bash
-sudo pacman -S --noconfirm ttf-dejavu pango i3 dmenu ffmpeg jq curl wget\
+sudo pacman -S --noconfirm ttf-dejavu pango i3 dmenu ffmpeg jq curl wgeti rsync refind\
         alacritty pavucontrol go xorg openssh imagemagick wmctrl scrot unzip \
-        light git nautilus qutebrowser base-devel python python-pip mtpfs \
-        arandr feh bluez bluez-utils gmtp pamixer acpi xorg-xinit gvfs-mtp\
-        mpv neofetch qbittorrent code sxiv vim npm polybar ttf-font-awesome \
-        pulseaudio sysstat android-file-transfer
+        light git nautilus firefox-developer-edition base-devel python obsidian \
+        arandr feh bluez bluez-utils gmtp pamixer acpi xorg-xinit gvfs-mtp noto-fonts\
+        mpv neofetch qbittorrent code sxiv vim npm polybar ttf-font-awesome figlet \
+        pulseaudio sysstat android-file-transfer python-pip mtpfs zathura ttf-montserrat
 sudo pacman -R --noconfirm i3lock 
-sudo pacman -S --noconfirm python-pywal
+sudo pacman -S --noconfirm python-pywal python-pytube python-pipx
 echo "exec i3 " >> $HOME/.xinitrc
 sudo systemctl enable bluetooth.service
 sudo chmod +s /usr/bin/light
@@ -197,7 +197,7 @@ git clone https://aur.archlinux.org/yay-git
 sudo chown -R $USER:$USER $HOME 
 cd $HOME/yay-git
 makepkg -si
-yay -S --noconfirm pfetch i3lock-fancy jmtpfs python-pywalfox
+yay -S --noconfirm localsend-bin uxplay i3lock-fancy jmtpfs python-pywalfox spotube simplescreenrecorder google-chrome
 sudo pywalfox install
 sudo rm -r $HOME/heimos $HOME/yay-git
 startx

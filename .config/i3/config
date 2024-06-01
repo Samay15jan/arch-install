@@ -3,8 +3,8 @@
 set $mod Mod4
 set_from_resource $fg i3wm.color7 #f0f0f0
 set_from_resource $bg i3wm.color2 #f0f0f0
-font pango: M+ 1m, FontAwesome, Ionicons, 10
-exec --no-startup-id xsetroot -cursor_name Breeze
+font Pango: /usr/share/fonts/TTF/Montserrat-SemiBold.ttf, 24
+exec --no-startup-id xsetroot -cursor_name Breeze 
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
@@ -22,14 +22,14 @@ floating_modifier $mod
 bindsym $mod+Return exec alacritty
 
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+Shift+q kill 
 
 # start dmenu
 bindcode $mod+40 exec --no-startup-id ~/.config/i3/scripts/dmenu.sh
 
 # border style
 for_window [class="^.*"] border pixel 0
-hide_edge_borders both
+hide_edge_borders both 
 gaps inner 4
 
 # change focus
@@ -81,6 +81,7 @@ bindsym $mod+Shift+1 move container to workspace number $ws1
 bindsym $mod+Shift+2 move container to workspace number $ws2
 bindsym $mod+Shift+3 move container to workspace number $ws3
 bindsym $mod+Shift+4 move container to workspace number $ws4
+#!/bin/bash
 bindsym $mod+Shift+5 move container to workspace number $ws5
 
 # Bound an app to a workspace
@@ -90,7 +91,6 @@ assign [class="Pavucontrol"] $ws5
 assign [class="mercury"] $ws2
 assign [class="Atom"] $ws1
 assign [class="qBittorrent"] $ws5
-assign [class="mpv"] $ws5
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -99,7 +99,7 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 
 # Lock
-#bindsym $mod+Shift+x exec ~/.config/i3/scripts/i3-lock
+#bindsym $mod+Shift+x exec ~/.config/i3/scripts/i3-lock 
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -120,6 +120,11 @@ bindsym $mod+r mode "resize"
 bindsym XF86MonBrightnessUp exec light -A 10 # increase screen brightness
 bindsym XF86MonBrightnessDown exec light -U 10 # decrease screen brightness
 
+# Multimedia Keys
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
 # Set wallpaper
 exec_always ~/.config/i3/scripts/wallpaper
 
@@ -129,13 +134,16 @@ exec xinput set-prop "Elan Touchpad" "libinput Tapping Enabled" 1
 exec_always xrandr --output HDMI-1 --primary --mode 1368x768 --pos 0x0 --rotate normal
 
 # Polybar
-exec_always --no-startup-id $HOME/.config/i3/scripts/polybar.sh
+exec --no-startup-id polybar
 
 # Shutdown
-bindsym Ctrl+Shift+Delete exec ~/.config/i3/scripts/shutdown
+bindsym Ctrl+Shift+Delete exec ~/.config/i3/scripts/shutdown && paplay ~/.config/polybar/sound.wav 
 
 # Lock
 bindsym $mod+Shift+x exec i3lock-fancy && paplay ~/.config/polybar/sound.wav
 
 exec_always ~/.config/i3/scripts/wall
 bindsym Print exec --no-startup-id scrot
+
+exec --no-startup-id eval $(dbus-launch --sh-syntax --exit-with-session i3)
+exec_always --no-startup-id cd /usr/lib && ./kdeconnectd

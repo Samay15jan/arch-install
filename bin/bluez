@@ -8,7 +8,9 @@ MAC=$(bluetoothctl devices | grep $select | awk {'print $2'})
 
 connect=$(bluetoothctl info $MAC | grep Connected: | awk '{print $2}')
 if [[ $connect = no ]]; then
-        bluetoothctl connect $MAC
+        notify-send "Attempting to connect to $select"
+        bluetoothctl connect $MAC || notify-send "Failed to Connect"
 else
+        notify-send "Attempting to disconnect $select"
         bluetoothctl disconnect $MAC
 fi
